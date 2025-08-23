@@ -11,19 +11,11 @@
                 <!-- Avatar section -->
                 <section>
                     <div class="flex gap-4">
-                        @if ($post->user->avatar)
-                            <img src="{{ $post->user->avatarUrl() }}"
-                                 alt="{{ $post->user->username }}"
-                                 class="rounded w-12 h-12"/>
-                        @else
-                            <img src="https://static.everypixel.com/ep-pixabay/0329/8099/0858/84037/3298099085884037069-head.png"
-                                 alt="Dummy avatar"
-                                 class="rounded w-12 h-12"/>
-                        @endif
+                        <x-user-avatar :user="$post->user"/>
 
                         <div>
                             <div class="flex gap-2">
-                                <h3>{{ $post->user->name }}</h3>
+                                <a href="{{ route('profile.show', $post->user) }}" class="hover:underline">{{ $post->user->name }}</a>
                                 &middot;
                                 <a href="#" class="text-emerald-500">Follow</a>
                             </div>
