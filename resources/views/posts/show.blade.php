@@ -33,7 +33,7 @@
                 </section>
 
                 <!-- Likes section -->
-                <x-like-button/>
+                <x-like-button :post="$post"/>
 
                 <!-- Content section -->
                 <section class="mt-8">
@@ -50,7 +50,7 @@
                 </section>
 
                 <!-- Another likes section -->
-                <x-like-button/>
+                <x-like-button :post="$post"/>
 
             </div>
         </div>
