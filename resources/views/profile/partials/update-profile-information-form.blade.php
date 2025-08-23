@@ -13,20 +13,42 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
         @csrf
         @method('patch')
 
+        @if($user->avatar)
+            <div>
+                <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}" class="rounded w-20 h-20"/>
+            </div>
+        @endif
+
+        <!-- Avatar -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="avatar" :value="__('Avatar')"/>
+            <x-text-input id="avatar" class="block mt-1 w-full" type="file" name="avatar" :value="old('avatar')"/>
+            <x-input-error :messages="$errors->get('avatar')" class="mt-2"/>
         </div>
 
+        <!-- Username -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <x-input-label for="username" :value="__('Username')"/>
+            <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->username)" required autofocus autocomplete="username"/>
+            <x-input-error class="mt-2" :messages="$errors->get('username')"/>
+        </div>
+
+        <!-- Name -->
+        <div>
+            <x-input-label for="name" :value="__('Name')"/>
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name"/>
+            <x-input-error class="mt-2" :messages="$errors->get('name')"/>
+        </div>
+
+        <!-- Email -->
+        <div>
+            <x-input-label for="email" :value="__('Email')"/>
+            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username"/>
+            <x-input-error class="mt-2" :messages="$errors->get('email')"/>
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
@@ -45,6 +67,15 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <!-- Bio -->
+        <div class="mt-4">
+            <x-input-label for="bio" :value="__('Bio')"/>
+            <x-text-area id="bio" class="block mt-1 w-full" type="text" name="bio">
+                {{ old('bio', $user->bio) }}
+            </x-text-area>
+            <x-input-error :messages="$errors->get('bio')" class="mt-2"/>
         </div>
 
         <div class="flex items-center gap-4">
