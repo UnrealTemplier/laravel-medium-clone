@@ -20,16 +20,25 @@
 
                 <!-- Sidebar section -->
                 <section class="w-[320px] border-l dark:border-gray-500 px-8">
-                    <x-user-avatar :user="$user" size="w-24 h-24"/>
-                    <h3>{{ $user->name }}</h3>
-                    <p class="text-gray-500">5K followers</p>
-                    <p>{{ $user->bio }}</p>
 
-                    <div class="mt-4">
-                        <button class="bg-emerald-500 rounded-full px-4 py-2 text-white">
-                            Follow
-                        </button>
-                    </div>
+                    <x-follow-container :user="$user">
+                        <x-user-avatar :user="$user" size="w-24 h-24"/>
+                        <h3>{{ $user->name }}</h3>
+                        <p class="text-gray-500">
+                            <span x-text="followersLabel"></span>
+                        </p>
+                        <p>{{ $user->bio }}</p>
+
+                        @if (Auth::user() && Auth::id() !== $user->id)
+                            <div class="mt-4">
+                                <button class="rounded-full px-4 py-2 text-white"
+                                        x-text="following ? 'Unfollow' : 'Follow'"
+                                        :class="following ? 'bg-red-500' : 'bg-emerald-500'"
+                                        @click="toggleFollow()">
+                                </button>
+                            </div>
+                        @endif
+                    </x-follow-container>
 
                 </section>
 
