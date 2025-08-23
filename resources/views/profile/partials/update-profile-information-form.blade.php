@@ -19,7 +19,7 @@
 
         @if($user->avatar)
             <div>
-                <img src="{{ $user->avatarUrl()) }}" alt="{{ $user->name }}" class="rounded w-20 h-20"/>
+                <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }}" class="rounded w-20 h-20"/>
             </div>
         @endif
 
