@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'Health',
             'Cars',
             'Politics',
-            'Cars'
+            'Bikes'
         ];
 
         foreach ($categories as $category) {
