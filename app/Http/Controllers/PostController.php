@@ -64,7 +64,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        dd($post);
     }
 
     /**
@@ -80,7 +80,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        if (Auth::user() && Auth::id() === $post->user->id) {
+            $post->delete();
+        }
+
+        return to_route('dashboard');
     }
 
     public function category(Category $category)

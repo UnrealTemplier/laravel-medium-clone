@@ -9,8 +9,8 @@
                 </section>
 
                 <!-- Avatar section -->
-                <section>
-                    <div class="flex gap-4">
+                <section class="flex items-center">
+                    <div class="flex flex-1 gap-4">
                         <x-user-avatar :user="$post->user"/>
 
                         <div>
@@ -33,6 +33,26 @@
                             </div>
                         </div>
                     </div>
+
+                    @if (Auth::user() && Auth::id() === $post->user->id)
+                        <div class="flex gap-2">
+                            <div>
+                                <a href="{{ route('posts.edit', $post) }}">
+                                    <x-primary-button>Edit</x-primary-button>
+                                </a>
+                            </div>
+
+                            <div>
+                                <form action="{{ route('posts.delete', $post) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <x-danger-button>Delete</x-danger-button>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+
                 </section>
 
                 @auth
@@ -53,11 +73,6 @@
                 <section class="mt-8">
                     <span class="px-4 py-2 rounded-2xl dark:text-gray-400 dark:bg-gray-700">{{ $post->category->name }}</span>
                 </section>
-
-                @auth
-                    <!-- Another likes section -->
-                    <x-like-button :post="$post"/>
-                @endauth
 
             </div>
         </div>

@@ -15,6 +15,10 @@ Route::get('/@{username}/{post:slug}', [PostController::class, 'show'])->name('p
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+    Route::patch('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.delete');
+
     Route::post('/follow/{user}', [FollowerController::class, 'toggleFollow'])->name('follow');
     Route::post('/like/{post}', [LikeController::class, 'toggleLike'])->name('like');
 });
