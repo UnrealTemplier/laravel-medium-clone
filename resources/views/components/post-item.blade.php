@@ -26,6 +26,6 @@ $postUrl = route('posts.show', [
     </div>
 
     <a href="{{ $postUrl }}">
-        <img class="rounded-r-lg w-48 h-full max-h-64 object-cover" src={{ Storage::url($post->image) }} alt=""/>
+        <img class="rounded-r-lg w-48 h-full max-h-64 object-cover" src={{ $post->imagePreviewUrl() }} alt=""/>
     </a>
 </div>

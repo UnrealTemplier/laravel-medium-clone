@@ -7,18 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /** @mixin Builder */
-class Post extends Model
+class Post extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     protected $fillable = [
         'title',
         'slug',
         'content',
-        'image',
         'category_id',
         'user_id',
         'published_at'
@@ -39,16 +41,33 @@ class Post extends Model
         return $this->hasMany(Like::class);
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('posts')
+             ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('preview')
+             ->width(400);
+    }
+
     public function readTime(int $wordsPerMinute = 100): int
     {
         $wordsCount = str_word_count(strip_tags($this->content));
-        $minutes = (int)ceil($wordsCount / $wordsPerMinute);
+        $minutes    = (int)ceil($wordsCount / $wordsPerMinute);
 
         return max(1, $minutes);
     }
 
     public function imageUrl(): string
     {
-        return Storage::url($this->image);
+        return $this->getFirstMediaUrl('posts');
+    }
+
+    public function imagePreviewUrl(): string
+    {
+        return $this->getFirstMediaUrl('posts', 'preview');
     }
 }
