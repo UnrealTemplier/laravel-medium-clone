@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -29,17 +30,14 @@ class ProfileController extends Controller
     {
         $data = $request->validated();
 
-        /** @var UploadedFile $image */
-        $image = $data['avatar'] ?? null;
-        if ($image) {
-            $data['avatar'] = $image->store('avatars', 'public');
-        }
-
+        /** @var User $user */
         $request->user()->fill($data);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
+
+        $request->user()->addMediaFromRequest('avatar')->toMediaCollection('avatars');
 
         $request->user()->save();
 

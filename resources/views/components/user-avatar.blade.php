@@ -1,6 +1,6 @@
 @props(['user', 'size' => 'w-12 h12'])
 
-@if ($user->avatar)
+@if ($user->getFirstMedia('avatars'))
     <img src="{{ $user->avatarUrl() }}"
          alt="{{ $user->username }}"
          class="rounded {{ $size }}"/>
