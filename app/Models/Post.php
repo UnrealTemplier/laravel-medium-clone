@@ -61,6 +61,11 @@ class Post extends Model implements HasMedia
         return max(1, $minutes);
     }
 
+    public function creationDateFormat(string $format = 'M d, Y'): string
+    {
+        return $this->created_at->format($format);
+    }
+
     public function imageUrl(): string
     {
         return $this->getFirstMediaUrl('posts');
