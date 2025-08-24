@@ -8,10 +8,10 @@ use App\Http\Controllers\PublicProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/@{user:username}', [PublicProfileController::class, 'show'])->name('profile.show');
+Route::get('/', [PostController::class, 'index'])->name('dashboard');
+Route::get('/category/{category}', [PostController::class, 'category'])->name('posts.byCategory');
 
 Route::middleware(['auth', 'verified'])->group(function() {
-    Route::get('/', [PostController::class, 'index'])->name('dashboard');
-    Route::get('/category/{category}', [PostController::class, 'category'])->name('posts.byCategory');
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::get('/@{username}/{post:slug}', [PostController::class, 'show'])->name('posts.show');
