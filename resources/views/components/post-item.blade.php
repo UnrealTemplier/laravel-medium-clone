@@ -24,7 +24,7 @@
         <div class="flex gap-2 text-sm text-gray-500 items-center"
              x-data="{
                 hasLiked: {{ Auth::user() && Auth::user()->hasLiked($post) ? 'true' : 'false' }},
-                likesCount: {{ $post->likes()->count() }},
+                likesCount: {{ $post->likes_count }},
             }">
 
             <span>{{ $post->creationDateFormat() }}</span>

@@ -6,7 +6,6 @@ use App\Http\Requests\PostCreateRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -17,7 +16,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->simplePaginate(5);
+        $posts = Post
+            ::with(['user', 'media'])
+            ->withCount('likes')
+            ->latest()
+            ->simplePaginate(5);
         return view('posts.index', compact('posts'));
     }
 
@@ -37,7 +40,7 @@ class PostController extends Controller
     {
         $data = $request->validated();
 
-        $data['slug'] = Str::slug($data['title']);
+        $data['slug']    = Str::slug($data['title']);
         $data['user_id'] = Auth::id();
 
         /** @var Post $post */
@@ -82,7 +85,10 @@ class PostController extends Controller
 
     public function category(Category $category)
     {
-        $posts = $category->posts()->latest()->simplePaginate(5);
+        $posts = $category->posts()
+                          ->with(['user', 'media'])
+                          ->withCount('likes')
+                          ->latest()->simplePaginate(5);
 
         return view('posts.index', compact('posts'));
     }
