@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostCreateRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Models\Category;
 use App\Models\Post;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -64,15 +64,39 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        dd($post);
+        if ($post->user->id !== Auth::id()) {
+            abort(403);
+        }
+
+        $categories = Category::get();
+        return view('posts.edit', compact('post', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(PostUpdateRequest $request, Post $post)
     {
-        //
+        if ($post->user->id !== Auth::id()) {
+            abort(403);
+        }
+
+        $data = $request->validated();
+
+        if (array_key_exists('title', $data)) {
+            $data['slug'] = Str::slug($data['title']);
+        }
+
+        $post->update($data);
+
+        if (array_key_exists('image', $data)) {
+            $post->addMediaFromRequest('image')->toMediaCollection('posts');
+        }
+
+        return to_route('posts.show', [
+            'username' => $post->user->username,
+            'post'     => $post
+        ]);
     }
 
     /**
@@ -80,9 +104,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if (Auth::user() && Auth::id() === $post->user->id) {
-            $post->delete();
+        if ($post->user->id !== Auth::id()) {
+            abort(403);
         }
+
+        $post->delete();
 
         return to_route('dashboard');
     }
