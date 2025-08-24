@@ -1,7 +1,7 @@
 @props(['user'])
 
 <div x-data="{
-        following: {{ $user->isFollowedBy(Auth::user()) ? 'true' : 'false' }},
+        following: {{ Auth::user() && $user->isFollowedBy(Auth::user()) ? 'true' : 'false' }},
         followersCount: {{ $user->followers()->count() }},
         followersLabel: 'followers',
         updateFollowersLabel() {

@@ -14,16 +14,17 @@
                         <x-user-avatar :user="$post->user"/>
 
                         <div>
-                            @auth
-                                <x-follow-container :user="$post->user" class="flex gap-2">
-                                    <a href="{{ route('profile.show', $post->user) }}" class="hover:underline">{{ $post->user->name }}</a>
+
+                            <x-follow-container :user="$post->user" class="flex gap-2">
+                                <a href="{{ route('profile.show', $post->user) }}" class="hover:underline">{{ $post->user->name }}</a>
+                                @auth
                                     &middot;
-                                    <button x-text="following ? 'Unfollow' : 'Follow'"
-                                            :class="following ? 'text-red-500' : 'text-emerald-500'"
-                                            @click="toggleFollow()">
-                                    </button>
-                                </x-follow-container>
-                            @endauth
+                                <button x-text="following ? 'Unfollow' : 'Follow'"
+                                        :class="following ? 'text-red-500' : 'text-emerald-500'"
+                                        @click="toggleFollow()">
+                                </button>
+                                @endauth
+                            </x-follow-container>
 
                             <div class="flex gap-2 text-sm text-gray-500">
                                 {{ $post->readTime() }} min read
