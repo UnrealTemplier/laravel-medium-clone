@@ -14,14 +14,16 @@
                         <x-user-avatar :user="$post->user"/>
 
                         <div>
-                            <x-follow-container :user="$post->user" class="flex gap-2">
-                                <a href="{{ route('profile.show', $post->user) }}" class="hover:underline">{{ $post->user->name }}</a>
-                                &middot;
-                                <button x-text="following ? 'Unfollow' : 'Follow'"
-                                   :class="following ? 'text-red-500' : 'text-emerald-500'"
-                                   @click="toggleFollow()">
-                                </button>
-                            </x-follow-container>
+                            @auth
+                                <x-follow-container :user="$post->user" class="flex gap-2">
+                                    <a href="{{ route('profile.show', $post->user) }}" class="hover:underline">{{ $post->user->name }}</a>
+                                    &middot;
+                                    <button x-text="following ? 'Unfollow' : 'Follow'"
+                                            :class="following ? 'text-red-500' : 'text-emerald-500'"
+                                            @click="toggleFollow()">
+                                    </button>
+                                </x-follow-container>
+                            @endauth
 
                             <div class="flex gap-2 text-sm text-gray-500">
                                 {{ $post->readTime() }} min read
@@ -32,8 +34,10 @@
                     </div>
                 </section>
 
-                <!-- Likes section -->
-                <x-like-button :post="$post"/>
+                @auth
+                    <!-- Likes section -->
+                    <x-like-button :post="$post"/>
+                @endauth
 
                 <!-- Content section -->
                 <section class="mt-8">
@@ -49,8 +53,10 @@
                     <span class="px-4 py-2 rounded-2xl dark:text-gray-400 dark:bg-gray-700">{{ $post->category->name }}</span>
                 </section>
 
-                <!-- Another likes section -->
-                <x-like-button :post="$post"/>
+                @auth
+                    <!-- Another likes section -->
+                    <x-like-button :post="$post"/>
+                @endauth
 
             </div>
         </div>
